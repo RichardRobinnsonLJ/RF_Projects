@@ -38,119 +38,86 @@ The objective is to achieve:
 
 ## 📐 Design Calculations
 
-### 1. Transconductance (gm)
+### 🔹 Given Parameters
 
-[
-g_m = \mu_n C_{ox} \frac{W}{L} (V_{GS} - V_{th})
-]
-
-[
-C_{ox} = \frac{\varepsilon_0 \varepsilon_{ox}}{t_{ox}}
-]
-
-Substituting values:
-
-* ( \mu_n = 300 \times 10^{-4} )
-* ( \varepsilon_0 = 8.854 \times 10^{-12} )
-* ( \varepsilon_{ox} = 3.6 )
-* ( t_{ox} = 2.2 \text{ nm} )
-
-[
-g_m = 10.86 \times 10^{-3} , S
-]
+* VDD = 1.2 V
+* f = 2.4 GHz
+* VGS = 0.3 V
+* Vth = 0.2 V
+* W = 25 um, L = 100 nm
+* tox = 2.2 nm
+* ε0 = 8.854e-12
+* εox = 3.6
+* μn = 300e-4
 
 ---
 
-### 2. Drain Current (Id)
+### 🔹 Step 1: Oxide Capacitance
 
-[
-g_m = \frac{2 I_D}{V_{GS} - V_{th}}
-]
-
-[
-I_D = \frac{g_m (V_{GS} - V_{th})}{2}
-]
-
-[
-I_D = 5.43 \times 10^{-4} , A
-]
+Cox = (ε0 × εox) / tox
+Cox = (8.854e-12 × 3.6) / (2.2e-9)
+Cox ≈ 1.45e-2 F/m²
 
 ---
 
-### 3. Load Resistance (RD)
+### 🔹 Step 2: Transconductance (gm)
 
-[
-R_D = \frac{V_{DD}}{2 I_D}
-]
+gm = μn × Cox × (W/L) × (VGS - Vth)
 
-[
-R_D = 1.1 , k\Omega
-]
+gm ≈ 10.86e-3 S
 
 ---
 
-### 4. Inductor Conversion
+### 🔹 Step 3: Drain Current (Id)
 
-[
-X_L = 2\pi f L = R_D
-]
+gm = 2Id / (VGS - Vth)
 
-[
-L = \frac{R_D}{2\pi f}
-]
-
-[
-L = 66.9 , nH
-]
+Id = (gm × (VGS - Vth)) / 2
+Id ≈ 5.43e-4 A
 
 ---
 
-### 5. Input Matching Network
+### 🔹 Step 4: Load Resistance (RD)
 
-Given:
-
-* ( R_s = 50\Omega )
-* ( R_p = 10k\Omega )
-
-[
-X_s = \sqrt{R_s (R_p - R_s)} = 705.33
-]
-
-[
-L = \frac{X_s}{2\pi f} = 46.77 , nH
-]
-
-[
-X_p = \frac{R_s R_p}{X_s} = 708.88
-]
-
-[
-C = \frac{1}{2\pi f X_p} = 93.5 , fF
-]
+RD = VDD / (2 × Id)
+RD ≈ 1.1 kΩ
 
 ---
 
-### 6. Output Matching Network
+### 🔹 Step 5: Inductor Conversion
 
-[
-|S_{22}| = 0.95
-]
+XL = RD
 
-[
-Z_L = 1.958 , k\Omega
-]
+L = RD / (2πf)
+L ≈ 66.9 nH
 
-[
-X_s = \sqrt{50 (Z_L - 50)} = 308.91
-]
+---
 
-[
-L = \frac{X_s}{2\pi f} = 20.48 , nH
-]
+### 🔹 Step 6: Input Matching
 
-[
-C = 0.21 , pF
-]
+Rs = 50 ohm
+Rp = 10k ohm
+
+Xs = √[Rs(Rp - Rs)] ≈ 705.33
+
+L = Xs / (2πf) ≈ 46.77 nH
+
+Xp = (Rs × Rp) / Xs ≈ 708.88
+
+C = 1 / (2πfXp) ≈ 93.5 fF
+
+---
+
+### 🔹 Step 7: Output Matching
+
+ZL ≈ 1.958k ohm
+
+Xs ≈ 308.91
+
+L ≈ 20.48 nH
+
+C ≈ 0.21 pF
+
 
 ---
 
@@ -164,19 +131,6 @@ C = 0.21 , pF
 | S12          | Negative    | -47.60 dB |
 | Noise Figure | < 3 dB      | 2.85 dB   |
 | Bandwidth    | 200–400 MHz | 316 MHz   |
-
----
-
-## 📸 Required Plots (Upload These)
-
-Add the following images inside this folder:
-
-* `schematic.png` → Circuit schematic
-* `s_parameters.png` → S11, S21, S22, S12 plot
-* `noise_figure.png` → NF vs frequency
-* `bandwidth.png` → Gain vs frequency
-* `compression.png` → 1 dB compression point
-* `harmonics.png` → Harmonic distortion
 
 ---
 
